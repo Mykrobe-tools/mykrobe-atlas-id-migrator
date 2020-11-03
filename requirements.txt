@@ -1,0 +1,16 @@
+bigsi @ git+https://github.com/iqbal-lab-org/BIGSI.git@12966cacefc14354ee3c42dc2852917475567a0d
+biopython==1.78
+bitarray==1.6.0
+certifi==2020.6.20
+chardet==3.0.4
+Cython==0.29.21
+falcon==2.0.0
+hug==2.6.1
+humanfriendly==8.2
+idna==2.10
+mmh3==2.5.1
+numpy==1.19.4
+PyYAML==5.3.1
+redis==3.5.3
+requests==2.24.0
+urllib3==1.25.11
