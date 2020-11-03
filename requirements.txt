@@ -15,5 +15,5 @@ PyYAML==5.3.1
 redis==3.5.3
 requests==2.24.0
 six==1.15.0
-tracking-client @ git+git://github.com/Mykrobe-tools/mykrobe-atlas-tracking-client@f28faaa8ae307b7950b440d986efd4c9fbeaa746
+tracking-client @ git+git://github.com/Mykrobe-tools/mykrobe-atlas-tracking-client@fb59f9ce31da63fa92423415942be44013cc9e89
 urllib3==1.25.11
