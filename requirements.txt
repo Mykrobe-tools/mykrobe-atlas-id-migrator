@@ -10,7 +10,10 @@ humanfriendly==8.2
 idna==2.10
 mmh3==2.5.1
 numpy==1.19.4
+python-dateutil==2.8.1
 PyYAML==5.3.1
 redis==3.5.3
 requests==2.24.0
+six==1.15.0
+tracking-client @ git+git://github.com/Mykrobe-tools/mykrobe-atlas-tracking-client@f28faaa8ae307b7950b440d986efd4c9fbeaa746
 urllib3==1.25.11
