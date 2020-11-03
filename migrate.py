@@ -43,7 +43,7 @@ def migrate(mapping_filepath, storage_engine, storage_filename=None):
     with open(mapping_filepath, 'r') as infile:
         mapping = pickle.load(infile)
         for isolate_id, experiment_id in mapping.items():
-            storage.migrate(isolate_id, experiment_id)
+            storage[experiment_id] = storage[isolate_id]
 
 
 parser = argparse.ArgumentParser(description='Migrate sample IDs from external IDs to Atlas tracking IDs.')
