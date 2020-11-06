@@ -3,6 +3,7 @@ import pickle
 
 from bigsi.constants import DEFAULT_BERKELEY_DB_STORAGE_CONFIG, DEFAULT_ROCKS_DB_STORAGE_CONFIG, \
     DEFAULT_REDIS_STORAGE_CONFIG
+from bigsi.graph.metadata import SampleMetadata
 from bigsi.storage import get_storage
 
 
@@ -39,11 +40,22 @@ def determine_config(storage_engine, storage_filename=None):
 def migrate(mapping_filepath, storage_engine, storage_filename=None):
     config = determine_config(storage_engine, storage_filename)
     storage = get_storage(config)
-
+    current_metadata = SampleMetadata(storage)
     with open(mapping_filepath, 'r') as infile:
         mapping = pickle.load(infile)
-        for isolate_id, experiment_id in mapping.items():
-            storage[experiment_id] = storage[isolate_id]
+
+    for colour in range(current_metadata.num_samples):
+        old_id = current_metadata.colour_to_sample(colour)
+        new_id = mapping.get(old_id)
+
+        if new_id:
+            current_metadata._validate_sample_name(new_id)
+            current_metadata._set_sample_colour(new_id, colour)
+            current_metadata._set_colour_sample(colour, new_id)
+            current_metadata._set_sample_colour(old_id, -1)
+
+    storage.sync()
+    storage.close()
 
 
 parser = argparse.ArgumentParser(description='Migrate sample IDs from external IDs to Atlas tracking IDs.')
