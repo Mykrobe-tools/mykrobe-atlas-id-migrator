@@ -41,7 +41,7 @@ def migrate(mapping_filepath, storage_engine, storage_filename=None):
     config = determine_config(storage_engine, storage_filename)
     storage = get_storage(config)
     current_metadata = SampleMetadata(storage)
-    with open(mapping_filepath, 'r') as infile:
+    with open(mapping_filepath, 'rb') as infile:
         mapping = pickle.load(infile)
 
     for old_id in mapping:
