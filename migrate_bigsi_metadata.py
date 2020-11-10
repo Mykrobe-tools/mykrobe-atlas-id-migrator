@@ -44,15 +44,15 @@ def migrate(mapping_filepath, storage_engine, storage_filename=None):
     with open(mapping_filepath, 'r') as infile:
         mapping = pickle.load(infile)
 
-    for colour in range(current_metadata.num_samples):
-        old_id = current_metadata.colour_to_sample(colour)
+    for old_id in mapping:
         new_id = mapping.get(old_id)
-
-        if new_id:
-            current_metadata._validate_sample_name(new_id)
-            current_metadata._set_sample_colour(new_id, colour)
-            current_metadata._set_colour_sample(colour, new_id)
-            current_metadata._set_sample_colour(old_id, -1)
+        if new_id and new_id != old_id:
+            colour = current_metadata.sample_to_colour(old_id)
+            if colour:
+                current_metadata._validate_sample_name(new_id)
+                current_metadata._set_sample_colour(new_id, colour)
+                current_metadata._set_colour_sample(colour, new_id)
+                current_metadata._set_sample_colour(old_id, -1)
 
     storage.sync()
     storage.close()
