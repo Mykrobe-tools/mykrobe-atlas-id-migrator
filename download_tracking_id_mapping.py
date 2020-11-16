@@ -14,9 +14,9 @@ def download(isolate_id_list_filepath, tracking_api_host_port):
 
     sample_api = SampleApi(api_client)
 
-    mapping = {}
-
     with open(isolate_id_list_filepath, 'r') as inf:
+        mapping = {}
+
         for iid in inf:
             from_tracking_api = sample_api.samples_get(isolate_id=iid)
 
@@ -26,7 +26,7 @@ def download(isolate_id_list_filepath, tracking_api_host_port):
 
             mapping[iid] = from_tracking_api[0].id
 
-    print(pickle.dumps(mapping))
+        pickle.dump(mapping, open("{filepath}.pickle".format(filepath=isolate_id_list_filepath), "wb"))
 
 
 parser = argparse.ArgumentParser(description='Download ID mapping from Tracking API.')
