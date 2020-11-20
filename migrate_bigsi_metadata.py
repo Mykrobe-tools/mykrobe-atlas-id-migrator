@@ -1,5 +1,4 @@
 import argparse
-import pickle
 
 from bigsi.constants import DEFAULT_BERKELEY_DB_STORAGE_CONFIG, DEFAULT_ROCKS_DB_STORAGE_CONFIG, \
     DEFAULT_REDIS_STORAGE_CONFIG
@@ -42,17 +41,15 @@ def migrate(mapping_filepath, storage_engine, storage_filename=None):
     storage = get_storage(config)
     current_metadata = SampleMetadata(storage)
     with open(mapping_filepath, 'rb') as infile:
-        mapping = pickle.load(infile)
-
-    for old_id in mapping:
-        new_id = mapping.get(old_id)
-        if new_id and new_id != old_id:
-            colour = current_metadata.sample_to_colour(old_id)
-            if colour:
-                current_metadata._validate_sample_name(new_id)
-                current_metadata._set_sample_colour(new_id, colour)
-                current_metadata._set_colour_sample(colour, new_id)
-                current_metadata._set_sample_colour(old_id, -1)
+        for line in infile:
+            isolate_id, experiment_id, tracking_id = line.strip().split(",")
+            if tracking_id and tracking_id != isolate_id:
+                colour = current_metadata.sample_to_colour(isolate_id)
+                if colour:
+                    current_metadata._validate_sample_name(tracking_id)
+                    current_metadata._set_sample_colour(tracking_id, colour)
+                    current_metadata._set_colour_sample(colour, tracking_id)
+                    current_metadata._set_sample_colour(isolate_id, -1)
 
     storage.sync()
     storage.close()
